@@ -37,7 +37,7 @@ import abc
 class QgsMetadataABC(abc.ABC):
     pass
 
-class QgsMetadataFieldClass(abc.ABC):
+class QgsMetadataFieldABC(abc.ABC):
     pass
 
 class QgsVersionABC(abc.ABC):
