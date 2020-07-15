@@ -36,140 +36,115 @@ from .version import QgsVersion
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 SPEC = (
+    {"comment": "module name", "dtype": str, "name": "id", "is_required": True,},
     {
-        'comment': 'module name',
-        'dtype': str,
-        'name': 'id',
-        'is_required': True,
+        "comment": "human readable plugin name",
+        "dtype": str,
+        "i18n": True,
+        "name": "name",
+        "is_required": True,
     },
     {
-        'comment': 'human readable plugin name',
-        'dtype': str,
-        'i18n': True,
-        'name': 'name',
-        'is_required': True,
+        "comment": "short description of the plugin purpose only",
+        "dtype": str,
+        "i18n": True,
+        "name": "description",
+        "is_required": True,
     },
     {
-        'comment': 'short description of the plugin purpose only',
-        'dtype': str,
-        'i18n': True,
-        'name': 'description',
-        'is_required': True,
+        "comment": "longer description: how does it work, where does it install, how to run it?",
+        "dtype": str,
+        "i18n": True,
+        "name": "about",
+        "is_required": True,
     },
     {
-        'comment': 'longer description: how does it work, where does it install, how to run it?',
-        'dtype': str,
-        'i18n': True,
-        'name': 'about',
-        'is_required': True,
+        "comment": "comma separated, spaces allowed",
+        "dtype": tuple,
+        "importer": lambda x: tuple(x.split(",")),
+        "exporter": lambda x: ",".join(x),
+        "i18n": True,
+        "name": "tags",
+    },
+    {"comment": "may be multiline", "dtype": str, "name": "changelog",},
+    {"dtype": str, "name": "author", "is_required": True,},  # author_name
+    {"dtype": str, "name": "email", "is_required": True,},  # author_email
+    {"comment": "url to the plugin homepage", "dtype": str, "name": "homepage",},
+    {"comment": "url to a tracker site", "dtype": str, "name": "tracker",},
+    {
+        "comment": "url to the source code repository",
+        "dtype": str,
+        "name": "repository",  # 'code_repository'
+        "is_required": True,
+    },
+    {"comment": "path to the icon", "dtype": str, "name": "icon",},
+    {
+        "comment": "true if experimental, false if stable",
+        "dtype": bool,
+        "importer": str_to_bool,
+        "exporter": lambda x: bool_to_str(x, style="truefalse"),
+        "name": "experimental",
+        "default_value": False,
     },
     {
-        'comment': 'comma separated, spaces allowed',
-        'dtype': tuple,
-        'importer': lambda x: tuple(x.split(',')),
-        'exporter': lambda x: ','.join(x),
-        'i18n': True,
-        'name': 'tags',
+        "comment": "true if deprecated, false if actual",
+        "dtype": bool,
+        "importer": str_to_bool,
+        "exporter": lambda x: bool_to_str(x, style="truefalse"),
+        "name": "deprecated",
+        "default_value": False,
     },
     {
-        'comment': 'may be multiline',
-        'dtype': str,
-        'name': 'changelog',
+        "comment": "url for downloading the plugin",
+        "dtype": str,
+        "name": "download_url",
     },
     {
-        'dtype': str,
-        'name': 'author', # author_name
-        'is_required': True,
+        "comment": "the zip file name to be unzipped after downloaded",
+        "dtype": str,
+        "name": "file_name",
     },
     {
-        'dtype': str,
-        'name': 'email', # author_email
-        'is_required': True,
+        "comment": "dotted notation of minimum QGIS version",
+        "dtype": QgsVersion,
+        "importer": lambda x: QgsVersion.from_qgisversion(
+            x, fix_plugin_compatibility=True
+        ),  # TODO is it actually True?
+        "exporter": lambda x: x.original,
+        "name": "qgisMinimumVersion",
+        "is_required": True,
     },
     {
-        'comment': 'url to the plugin homepage',
-        'dtype': str,
-        'name': 'homepage',
+        "comment": "dotted notation of maximum QGIS version",
+        "dtype": QgsVersion,
+        "importer": lambda x: QgsVersion.from_qgisversion(
+            x, fix_plugin_compatibility=False
+        ),  # TODO is it actually False?
+        "exporter": lambda x: x.original,
+        "name": "qgisMaximumVersion",
     },
     {
-        'comment': 'url to a tracker site',
-        'dtype': str,
-        'name': 'tracker',
+        "dtype": QgsVersion,
+        "importer": QgsVersion.from_pluginversion,
+        "exporter": lambda x: x.original,
+        "name": "version",
+        "is_required": True,
     },
     {
-        'comment': 'url to the source code repository',
-        'dtype': str,
-        'name': 'repository', # 'code_repository'
-        'is_required': True,
+        "comment": "determines if the plugin provides processing algorithms",
+        "dtype": bool,
+        "importer": str_to_bool,
+        "exporter": lambda x: bool_to_str(x, style="truefalse"),
+        "name": "hasProcessingProvider",
+        "default_value": False,  # TODO remove?
     },
     {
-        'comment': 'path to the icon',
-        'dtype': str,
-        'name': 'icon',
-    },
-    {
-        'comment': 'true if experimental, false if stable',
-        'dtype': bool,
-        'importer': str_to_bool,
-        'exporter': lambda x: bool_to_str(x, style = 'truefalse'),
-        'name': 'experimental',
-        'default_value': False,
-    },
-    {
-        'comment': 'true if deprecated, false if actual',
-        'dtype': bool,
-        'importer': str_to_bool,
-        'exporter': lambda x: bool_to_str(x, style = 'truefalse'),
-        'name': 'deprecated',
-        'default_value': False,
-    },
-    {
-        'comment': 'url for downloading the plugin',
-        'dtype': str,
-        'name': 'download_url',
-    },
-    {
-        'comment': 'the zip file name to be unzipped after downloaded',
-        'dtype': str,
-        'name': 'file_name',
-    },
-    {
-        'comment': 'dotted notation of minimum QGIS version',
-        'dtype': QgsVersion,
-        'importer': lambda x: QgsVersion.from_qgisversion(x, fix_plugin_compatibility = True), # TODO is it actually True?
-        'exporter': lambda x: x.original,
-        'name': 'qgisMinimumVersion',
-        'is_required': True,
-    },
-    {
-        'comment': 'dotted notation of maximum QGIS version',
-        'dtype': QgsVersion,
-        'importer': lambda x: QgsVersion.from_qgisversion(x, fix_plugin_compatibility = False), # TODO is it actually False?
-        'exporter': lambda x: x.original,
-        'name': 'qgisMaximumVersion',
-    },
-    {
-        'dtype': QgsVersion,
-        'importer': QgsVersion.from_pluginversion,
-        'exporter': lambda x: x.original,
-        'name': 'version',
-        'is_required': True,
-    },
-    {
-        'comment': 'determines if the plugin provides processing algorithms',
-        'dtype': bool,
-        'importer': str_to_bool,
-        'exporter': lambda x: bool_to_str(x, style = 'truefalse'),
-        'name': 'hasProcessingProvider',
-        'default_value': False, # TODO remove?
-    },
-    {
-        'comment': 'determines if the plugin provides functionallity for server',
-        'dtype': bool,
-        'importer': str_to_bool,
-        'exporter': lambda x: bool_to_str(x, style = 'truefalse'),
-        'name': 'server',
+        "comment": "determines if the plugin provides functionallity for server",
+        "dtype": bool,
+        "importer": str_to_bool,
+        "exporter": lambda x: bool_to_str(x, style="truefalse"),
+        "name": "server",
     },
 )
 
-SPEC_DTYPES = tuple({field['dtype'] for field in SPEC})
+SPEC_DTYPES = tuple({field["dtype"] for field in SPEC})

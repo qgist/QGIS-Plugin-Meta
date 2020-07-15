@@ -34,11 +34,14 @@ import abc
 # ABCs
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+
 class QgsMetadataABC(abc.ABC):
     pass
 
+
 class QgsMetadataFieldABC(abc.ABC):
     pass
+
 
 class QgsVersionABC(abc.ABC):
     pass

@@ -29,12 +29,27 @@ specific language governing rights and limitations under the License.
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 VERSION_PREFIXES = (
-    'VERSION', 'VER.', 'VER', 'V.', 'V',
-    'REVISION', 'REV.', 'REV', 'R.', 'R',
-    )
+    "VERSION",
+    "VER.",
+    "VER",
+    "V.",
+    "V",
+    "REVISION",
+    "REV.",
+    "REV",
+    "R.",
+    "R",
+)
 VERSION_UNSTABLE_SUFFIXES = (
-    'ALPHA', 'BETA', 'PREVIEW', 'RC', 'TRUNK',
-    )
+    "ALPHA",
+    "BETA",
+    "PREVIEW",
+    "RC",
+    "TRUNK",
+)
 VERSION_DELIMITERS = (
-    '.', '-', '_', ' ', # TODO commas, i.e. `,`?
-    )
+    ".",
+    "-",
+    "_",
+    " ",  # TODO commas, i.e. `,`?
+)

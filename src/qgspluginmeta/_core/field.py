@@ -39,6 +39,7 @@ from typeguard import typechecked
 # CLASS
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+
 @typechecked
 class QgsMetadataField(QgsMetadataFieldABC):
     """
@@ -47,7 +48,8 @@ class QgsMetadataField(QgsMetadataFieldABC):
     Mutable.
     """
 
-    def __init__(self,
+    def __init__(
+        self,
         name: str,
         dtype: typing.Any,
         value: typing.Any = None,
@@ -57,8 +59,8 @@ class QgsMetadataField(QgsMetadataFieldABC):
         is_required: bool = False,
         i18n: bool = False,
         known: bool = True,
-        comment: str = '',
-        ):
+        comment: str = "",
+    ):
 
         if len(name) == 0:
             raise ValueError('"name" must not be empty.')
@@ -71,10 +73,10 @@ class QgsMetadataField(QgsMetadataFieldABC):
         self._exporter = exporter
         self._is_required = is_required
         self._value = None
-        self._known = known # is meta field a known one?
+        self._known = known  # is meta field a known one?
 
-        self._i18n = i18n # TODO unused
-        self._comment = comment # TODO unused
+        self._i18n = i18n  # TODO unused
+        self._comment = comment  # TODO unused
 
         if not self._is_valid_value(value) and value is not None:
             raise TypeError('"value" does not have matching tyspe.')
@@ -87,19 +89,19 @@ class QgsMetadataField(QgsMetadataFieldABC):
     def __repr__(self) -> str:
 
         return (
-            '<QgsMetadata '
+            "<QgsMetadata "
             f'name="{self._name:s}" '
             f'dtype={getattr(self._dtype, "__name__", str(self._dtype)):s} '
             f'set={"yes" if self.value_set else "no"} '
             f'known={"yes" if self._known else "no"} '
             f'i18n={"yes" if self._i18n else "no"} '
             f'required={"yes" if self._is_required else "no"}'
-            '>'
-            )
+            ">"
+        )
 
-# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# HELPER
-# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    # HELPER
+    # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     def _is_valid_value(self, value: typing.Any) -> bool:
 
@@ -115,41 +117,41 @@ class QgsMetadataField(QgsMetadataFieldABC):
             raise TypeError('"value_str" must be a str.')
         return value_str
 
-# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# API
-# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    # API
+    # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     def copy(self) -> QgsMetadataFieldABC:
 
         return type(self)(
-            name = self._name,
-            dtype = self._dtype,
-            value = self._value,
-            default_value = self._default_value,
-            importer = self._importer,
-            exporter = self._exporter,
-            is_required = self._is_required,
-            i18n = self._i18n,
-            known = self._known,
-            comment = self._comment,
-            )
+            name=self._name,
+            dtype=self._dtype,
+            value=self._value,
+            default_value=self._default_value,
+            importer=self._importer,
+            exporter=self._exporter,
+            is_required=self._is_required,
+            i18n=self._i18n,
+            known=self._known,
+            comment=self._comment,
+        )
 
     def update(self, other: QgsMetadataFieldABC):
 
         if not isinstance(other, type(self)):
             raise TypeError('"other" is not a meta data field')
         if self.name != other.name:
-            raise TypeError('name mismatch')
+            raise TypeError("name mismatch")
         if self.dtype != other.dtype:
-            raise TypeError('dtype mismatch')
+            raise TypeError("dtype mismatch")
         if not other.value_set:
             return
 
         self.value = other.value
 
-# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# PROPERTIES
-# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    # PROPERTIES
+    # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     @property
     def name(self) -> str:
@@ -184,7 +186,7 @@ class QgsMetadataField(QgsMetadataFieldABC):
     @property
     def value_string(self) -> str:
         if not self.value_set:
-            raise ValueError('Nothing to export to string - value not set.')
+            raise ValueError("Nothing to export to string - value not set.")
         return self._value_to_string(self._value)
 
     @value_string.setter
@@ -200,23 +202,18 @@ class QgsMetadataField(QgsMetadataFieldABC):
     @property
     def default_value_string(self) -> str:
         if not self.default_value_set:
-            raise ValueError('Nothing to export to string - default_value not set.')
+            raise ValueError("Nothing to export to string - default_value not set.")
         return self._value_to_string(self._default_value)
 
     @property
     def is_required(self) -> bool:
         return self._is_required
 
-# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# PRE-CONSTRUCTOR
-# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    # PRE-CONSTRUCTOR
+    # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     @classmethod
     def from_unknown(cls, name: str, value: typing.Any) -> QgsMetadataFieldABC:
 
-        return cls(
-            name = name,
-            value = value,
-            dtype = type(value),
-            known = False,
-            )
+        return cls(name=name, value=value, dtype=type(value), known=False,)

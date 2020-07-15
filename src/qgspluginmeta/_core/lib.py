@@ -34,31 +34,33 @@ from typeguard import typechecked
 # ROUTINES
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+
 @typechecked
 def str_to_bool(value: str) -> bool:
 
-    if value.lower() in ('yes', 'true', '1'):
+    if value.lower() in ("yes", "true", "1"):
         return True
-    if value.lower() in ('no', 'false', '0'):
+    if value.lower() in ("no", "false", "0"):
         return False
 
-    if any((value.lower().startswith(item) for item in ('yes', 'true'))):
+    if any((value.lower().startswith(item) for item in ("yes", "true"))):
         return True
-    if any((value.lower().startswith(item) for item in ('no', 'false'))):
+    if any((value.lower().startswith(item) for item in ("no", "false"))):
         return False
 
     raise ValueError(f'value "{value:s}" can not be converted to bool')
+
 
 @typechecked
 def bool_to_str(value: bool, style: str) -> str:
 
     styles = {
-        'TrueFalse': lambda x: 'True' if x else 'False',
-        'truefalse': lambda x: 'true' if x else 'false',
-        'YesNo': lambda x: 'Yes' if x else 'No',
-        'yesno': lambda x: 'yes' if x else 'no',
-        '10': lambda x: '1' if x else '0',
-        }
+        "TrueFalse": lambda x: "True" if x else "False",
+        "truefalse": lambda x: "true" if x else "false",
+        "YesNo": lambda x: "Yes" if x else "No",
+        "yesno": lambda x: "yes" if x else "no",
+        "10": lambda x: "1" if x else "0",
+    }
 
     if style not in styles.keys():
         raise ValueError(f'style "{style:s}" is unknown')

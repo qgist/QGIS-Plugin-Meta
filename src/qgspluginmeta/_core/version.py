@@ -38,11 +38,12 @@ from .const import (
     VERSION_PREFIXES,
     VERSION_UNSTABLE_SUFFIXES,
     VERSION_DELIMITERS,
-    )
+)
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 
 @typechecked
 class QgsVersion(QgsVersionABC):
@@ -57,7 +58,7 @@ class QgsVersion(QgsVersionABC):
     def __init__(self, *elements: str, original: typing.Union[None, str] = None):
 
         self._elements = elements
-        self._original = original if original is not None else '.'.join(elements)
+        self._original = original if original is not None else ".".join(elements)
 
     def __repr__(self) -> str:
 
@@ -65,12 +66,14 @@ class QgsVersion(QgsVersionABC):
 
     def __str__(self) -> str:
 
-        return '.'.join(self._elements)
+        return ".".join(self._elements)
 
     def __getitem__(self, index: int) -> str:
 
         if index < 0 or index >= len(self):
-            raise IndexError(f'following index out of bounds: {index:d} (0 ... {len(self)-1:d})')
+            raise IndexError(
+                f"following index out of bounds: {index:d} (0 ... {len(self)-1:d})"
+            )
 
         return self._elements[index]
 
@@ -83,9 +86,7 @@ class QgsVersion(QgsVersionABC):
         if len(self) != len(other):
             return False
 
-        return all((
-            (a == b) for a, b in zip(self._elements, other._elements)
-            ))
+        return all(((a == b) for a, b in zip(self._elements, other._elements)))
 
     def __ne__(self, other: QgsVersionABC) -> bool:
 
@@ -149,9 +150,9 @@ class QgsVersion(QgsVersionABC):
         # if the lists are identical till the end of the shorther string, try to compare the odd tail
         # with the simple space (because the 'alpha', 'beta', 'preview' and 'rc' are LESS then nothing)
         if len(a) > base_len:
-            return cls._compare_elements(a[base_len], ' ') == 1
+            return cls._compare_elements(a[base_len], " ") == 1
         if len(b) > base_len:
-            return cls._compare_elements(' ', b[base_len]) == 1
+            return cls._compare_elements(" ", b[base_len]) == 1
 
         # if everything else fails, compare original strings
         return a.original > b.original
@@ -163,8 +164,16 @@ class QgsVersion(QgsVersionABC):
         if x == y:
             return 0
 
-        is_numeric = lambda element: len(element) > 0 and element.isnumeric() and element[0] != '0'
-        rank_string = lambda element: 'Z' + element if element not in VERSION_UNSTABLE_SUFFIXES else element
+        is_numeric = (
+            lambda element: len(element) > 0
+            and element.isnumeric()
+            and element[0] != "0"
+        )
+        rank_string = (
+            lambda element: "Z" + element
+            if element not in VERSION_UNSTABLE_SUFFIXES
+            else element
+        )
 
         # try to compare as numeric values (but only if the first character is not 0):
         if is_numeric(x) and is_numeric(y):
@@ -184,12 +193,12 @@ class QgsVersion(QgsVersionABC):
         "Remove possible prefix from given string and convert to uppercase"
 
         if len(version_str) == 0:
-            return ''
+            return ""
 
-        version_str = version_str.upper().strip(' \t\n')
+        version_str = version_str.upper().strip(" \t\n")
         for prefix in VERSION_PREFIXES:
             if version_str.startswith(prefix):
-                version_str = version_str[len(prefix):].strip(' \t\n')
+                version_str = version_str[len(prefix) :].strip(" \t\n")
 
         return version_str
 
@@ -198,7 +207,11 @@ class QgsVersion(QgsVersionABC):
         "Convert string to list of numbers and words"
 
         # return 0 for delimiter, 1 for digit and 2 for alphabetic character
-        char_type = lambda char: 0 if char in VERSION_DELIMITERS else (1 if char.isdigit() else 2)
+        char_type = (
+            lambda char: 0
+            if char in VERSION_DELIMITERS
+            else (1 if char.isdigit() else 2)
+        )
 
         elements = [version_str[0]]
         for index in range(1, len(version_str)):
@@ -211,7 +224,7 @@ class QgsVersion(QgsVersionABC):
 
         for element in elements:
             if len(element) == 0:
-                raise ValueError('splitting elements failed, element of zero-length')
+                raise ValueError("splitting elements failed, element of zero-length")
 
         return elements
 
@@ -221,21 +234,23 @@ class QgsVersion(QgsVersionABC):
 
         plugin_version = cls._split_version_str(
             cls._normalize_version_str(plugin_version_str)
-            )
+        )
 
-        return cls(*plugin_version, original = plugin_version_str)
+        return cls(*plugin_version, original=plugin_version_str)
 
     @classmethod
-    def from_qgisversion(cls, qgis_version_str: str, fix_plugin_compatibility: bool = False) -> QgsVersionABC:
+    def from_qgisversion(
+        cls, qgis_version_str: str, fix_plugin_compatibility: bool = False
+    ) -> QgsVersionABC:
         "Parse QGIS version string and return version object"
 
-        x, y, z = re.findall(r'^(\d*).(\d*).(\d*)', qgis_version_str)[0]
+        x, y, z = re.findall(r"^(\d*).(\d*).(\d*)", qgis_version_str)[0]
 
         # Return current QGIS version number as X.Y.Z for testing plugin compatibility.
         # If Y = 99, bump up to (X+1.0.0), so e.g. 2.99 becomes 3.0.0
         # This way QGIS X.99 is only compatible with plugins for the upcoming major release.
-        if fix_plugin_compatibility and y == '99':
+        if fix_plugin_compatibility and y == "99":
             x = str(int(x) + 1)
-            y = z = '0'
+            y = z = "0"
 
-        return cls(x, y, z, original = qgis_version_str)
+        return cls(x, y, z, original=qgis_version_str)

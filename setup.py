@@ -79,13 +79,7 @@ setup(
     setup_requires=[],
     install_requires=["typeguard",],
     extras_require={
-        "dev": [
-            "black",
-            "python-language-server[all]",
-            "setuptools",
-            "twine",
-            "wheel",
-        ]
+        "dev": ["black", "python-language-server[all]", "setuptools", "twine", "wheel",]
     },
     zip_safe=False,
     entry_points={},
