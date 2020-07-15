@@ -6,7 +6,7 @@ QGIS Plugin Meta
 Handling metadata from QGIS plugins
 https://github.com/qgist/QGIS-Plugin-Meta
 
-    src/qgspluginmeta/_core/dtype_version.py: Version data type
+    src/qgspluginmeta/_core/version.py: Version data type
 
     Copyright (C) 2020 QGIST project <info@qgist.org>
 
