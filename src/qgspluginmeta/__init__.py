@@ -31,3 +31,4 @@ specific language governing rights and limitations under the License.
 from ._core.field import QgsMetadataField
 from ._core.metadata import QgsMetadata
 from ._core.version import QgsVersion
+from ._core.repo import import_xml, export_xml
