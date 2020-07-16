@@ -77,7 +77,7 @@ setup(
     include_package_data=True,
     python_requires=">=3.{MINOR:d}".format(MINOR=python_minor_min),
     setup_requires=[],
-    install_requires=["typeguard",],
+    install_requires=["typeguard", "xmltodict",],
     extras_require={
         "dev": ["black", "python-language-server[all]", "setuptools", "twine", "wheel",]
     },
