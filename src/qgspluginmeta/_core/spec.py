@@ -36,12 +36,25 @@ from .version import QgsVersion
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 SPEC = (
-    {"comment": "module name", "dtype": str, "name": "id", "is_required": True,},
+    {
+        "comment": "module name",
+        "dtype": str,
+        "name": "id",
+        "is_required":
+        True,
+    },
+    {
+        "comment": "repository plugin id",
+        "dtype": int,
+        "name": "plugin_id",
+        "name_xml": "@plugin_id",
+    },
     {
         "comment": "human readable plugin name",
         "dtype": str,
         "i18n": True,
         "name": "name",
+        "name_xml": "@name",
         "is_required": True,
     },
     {
@@ -66,18 +79,43 @@ SPEC = (
         "i18n": True,
         "name": "tags",
     },
-    {"comment": "may be multiline", "dtype": str, "name": "changelog",},
-    {"dtype": str, "name": "author", "is_required": True,},  # author_name
-    {"dtype": str, "name": "email", "is_required": True,},  # author_email
-    {"comment": "url to the plugin homepage", "dtype": str, "name": "homepage",},
-    {"comment": "url to a tracker site", "dtype": str, "name": "tracker",},
+    {
+        "comment": "may be multiline",
+        "dtype": str,
+        "name": "changelog",
+    },
+    {
+        "dtype": str,
+        "name": "author",
+        "name_xml": "author_name",
+        "is_required": True,
+    },
+    {
+        "dtype": str,
+        "name": "email",
+        "is_required": True,
+    },  # author_email
+    {
+        "comment": "url to the plugin homepage",
+        "dtype": str,
+        "name": "homepage",
+    },
+    {
+        "comment": "url to a tracker site",
+        "dtype": str,
+        "name": "tracker",
+    },
     {
         "comment": "url to the source code repository",
         "dtype": str,
         "name": "repository",  # 'code_repository'
         "is_required": True,
     },
-    {"comment": "path to the icon", "dtype": str, "name": "icon",},
+    {
+        "comment": "path to the icon",
+        "dtype": str,
+        "name": "icon",
+    },
     {
         "comment": "true if experimental, false if stable",
         "dtype": bool,
@@ -112,6 +150,7 @@ SPEC = (
         ),  # TODO is it actually True?
         "exporter": lambda x: x.original,
         "name": "qgisMinimumVersion",
+        "name_xml": "qgis_minimum_version",
         "is_required": True,
     },
     {
@@ -122,6 +161,7 @@ SPEC = (
         ),  # TODO is it actually False?
         "exporter": lambda x: x.original,
         "name": "qgisMaximumVersion",
+        "name_xml": "qgis_maximum_version",
     },
     {
         "dtype": QgsVersion,
@@ -148,3 +188,8 @@ SPEC = (
 )
 
 SPEC_DTYPES = tuple({field["dtype"] for field in SPEC})
+XML_NAMES = {
+    field['name']: field['xml_name']
+    for field in SPEC
+    if field.get('xml_name', None) is not None
+}
