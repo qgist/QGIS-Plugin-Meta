@@ -34,7 +34,7 @@ import typing
 from typeguard import typechecked
 
 from .abc import QgsMetadataABC, QgsMetadataFieldABC
-from .spec import SPEC
+from .spec import SPEC, NAME_XML
 from .field import QgsMetadataField
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -146,7 +146,16 @@ class QgsMetadata(QgsMetadataABC):
     def as_xmldict(self) -> typing.Dict[str, str]:
         "Export meta data to dict for XML export"
 
-        return {}  # TODO stub
+        xml_dict = self.as_dict() # todo bools / exporters ...
+
+        xml_dict['file_name'] = f'{xml_dict["id"]:s}.{xml_dict["version"]:s}.zip'
+        xml_dict.pop('id')
+        xml_dict['@version'] = xml_dict['version']
+
+        for name, name_xml in NAME_XML.items():
+            xml_dict[name_xml] = xml_dict.pop(name)
+
+        return xml_dict
 
     # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # PRE-CONSTRUCTOR
@@ -164,19 +173,12 @@ class QgsMetadata(QgsMetadataABC):
 
         xml_dict = dict(xml_dict)  # gets rid of OrderedDict and copies dict!
 
-        for key in ("name", "plugin_id"):
-            xml_dict[key] = xml_dict.pop(f"@{key:s}")
-
         if xml_dict["@version"] != xml_dict["version"]:
             raise ValueError("One single plugin release has two versions")
         xml_dict.pop("@version")
 
-        for a, b in (
-            ("qgis_minimum_version", "qgisMinimumVersion"),
-            ("qgis_maximum_version", "qgisMaximumVersion"),
-            ("author_name", "author"),
-        ):
-            xml_dict[b] = xml_dict.pop(a)
+        for name, name_xml in NAME_XML.items():
+            xml_dict[name] = xml_dict.pop(name_xml)
 
         if "id" not in xml_dict.keys():
             if "file_name" not in xml_dict.keys():
@@ -190,7 +192,7 @@ class QgsMetadata(QgsMetadataABC):
             if xml_dict["version"] not in xml_dict["file_name"]:
                 raise ValueError('Version is not part of "file_name"')
             xml_dict["id"] = xml_dict["file_name"][
-                : -1 * (len(".zip") + len(xml_dict["version"]) + len("-"))
+                : -1 * (len(".zip") + len(xml_dict["version"]) + len("."))
             ]
 
         return cls(**xml_dict)
