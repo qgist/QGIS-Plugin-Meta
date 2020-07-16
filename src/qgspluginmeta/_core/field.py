@@ -51,6 +51,7 @@ class QgsMetadataField(QgsMetadataFieldABC):
     def __init__(
         self,
         name: str,
+        name_xml: typing.Union[None, str],
         dtype: typing.Any,
         value: typing.Any = None,
         default_value: typing.Any = None,
@@ -68,6 +69,7 @@ class QgsMetadataField(QgsMetadataFieldABC):
             raise TypeError('"dtype" unknown or broken.')
 
         self._name = name
+        self._name_xml = name if name_xml is None else name_xml
         self._dtype = dtype
         self._importer = importer
         self._exporter = exporter
@@ -125,6 +127,7 @@ class QgsMetadataField(QgsMetadataFieldABC):
 
         return type(self)(
             name=self._name,
+            name_xml=self._name_xml,
             dtype=self._dtype,
             value=self._value,
             default_value=self._default_value,
@@ -156,6 +159,10 @@ class QgsMetadataField(QgsMetadataFieldABC):
     @property
     def name(self) -> str:
         return self._name
+
+    @property
+    def name_xml(self) -> str:
+        return self._name_xml
 
     @property
     def dtype(self) -> typing.Any:
