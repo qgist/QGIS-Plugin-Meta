@@ -58,4 +58,6 @@ def import_xml(xml_string: str) -> typing.List[QgsMetadataABC]:
 @typechecked
 def export_xml(metadata: typing.List[QgsMetadataABC]) -> str:
 
-    return "" # TODO
+    return xmltodict.unparse({'plugins': {'pyqgis_plugin': [
+        metaobject.as_xmldict() for metaobject in metadata
+    ]}}, pretty=True)
