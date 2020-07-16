@@ -188,8 +188,9 @@ SPEC = (
 )
 
 SPEC_DTYPES = tuple({field["dtype"] for field in SPEC})
-XML_NAMES = {
-    field['name']: field['xml_name']
+NAME_TO_XML = {
+    field['name']: field['name_xml']
     for field in SPEC
-    if field.get('xml_name', None) is not None
+    if field.get('name_xml', None) is not None
 }
+XML_TO_NAME = {v: k for k, v in NAME_TO_XML.items()}
