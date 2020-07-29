@@ -63,38 +63,42 @@ def make_testdata():
         r = requests.get(f"{REPO_DEFAULT_URL:s}?qgis=3.{minor:d}")
         data = r.text
 
-        with open(
-            os.path.join(TESTDATA_FLD, f"plugins_3-{minor:02d}.xml"), "w"
-        ) as f:
+        with open(os.path.join(TESTDATA_FLD, f"plugins_3-{minor:02d}.xml"), "w") as f:
             f.write(data)
 
-        data = data.replace('& ', '&amp; ') # From plugin installer: Fix lonely ampersands in metadata
+        data = data.replace(
+            "& ", "&amp; "
+        )  # From plugin installer: Fix lonely ampersands in metadata
         tree = xmltodict.parse(data)
 
-        for node in tqdm(tree['plugins']['pyqgis_plugin']):
+        for node in tqdm(tree["plugins"]["pyqgis_plugin"]):
 
-            assert node['version'] == node['@version']
-            assert node['file_name'].endswith('.zip')
-            assert node['version'] in node['file_name']
+            assert node["version"] == node["@version"]
+            assert node["file_name"].endswith(".zip")
+            assert node["version"] in node["file_name"]
 
-            node_id = node['file_name'][:-1*(len('.zip') + len(node['version']) + len('.'))]
+            node_id = node["file_name"][
+                : -1 * (len(".zip") + len(node["version"]) + len("."))
+            ]
 
-            meta_fn = os.path.join(TESTDATA_FLD, f"metadata_{node_id:s}_{node['version']:s}.txt")
+            meta_fn = os.path.join(
+                TESTDATA_FLD, f"metadata_{node_id:s}_{node['version']:s}.txt"
+            )
             if os.path.exists(meta_fn):
                 continue
 
             try:
-                r = requests.get(node['download_url'])
+                r = requests.get(node["download_url"])
                 data = r.content
                 with io.BytesIO(data) as f:
-                    with zipfile.ZipFile(f, 'r') as fz:
-                        meta = fz.read(f'{node_id:s}/metadata.txt').decode('utf-8')
+                    with zipfile.ZipFile(f, "r") as fz:
+                        meta = fz.read(f"{node_id:s}/metadata.txt").decode("utf-8")
                 with open(meta_fn, "w") as f:
                     f.write(meta)
             except:
                 print(node)
                 if r.status_code == 404:
-                    print('HTTP 404')
+                    print("HTTP 404")
                     continue
                 raise
 
