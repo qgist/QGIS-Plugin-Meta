@@ -3,17 +3,21 @@ black:
 	black .
 
 clean:
+	coverage erase
+	make clean_py
+	find src/ tests/ -name '*.htm' -exec rm -f {} +
+	find src/ tests/ -name '*.html' -exec rm -f {} +
+	find src/ tests/ -name '*.so' -exec rm -f {} +
+	find src/ tests/ -name 'octave-workspace' -exec rm -f {} +
 	-rm -r build/*
-	find src/ -name '*.pyc' -exec rm -f {} +
-	find src/ -name '*.pyo' -exec rm -f {} +
-	find src/ -name '*~' -exec rm -f {} +
-	find src/ -name '__pycache__' -exec rm -fr {} +
-	find src/ -name '*.htm' -exec rm -f {} +
-	find src/ -name '*.html' -exec rm -f {} +
-	find src/ -name '*.so' -exec rm -f {} +
-	find src/ -name 'octave-workspace' -exec rm -f {} +
 	-rm -r dist/*
 	-rm -r src/*.egg-info
+
+clean_py:
+	find src/ tests/ -name '*.pyc' -exec rm -f {} +
+	find src/ tests/ -name '*.pyo' -exec rm -f {} +
+	find src/ tests/ -name '*~' -exec rm -f {} +
+	find src/ tests/ -name '__pycache__' -exec rm -fr {} +
 
 release:
 	make clean
@@ -31,6 +35,11 @@ upload:
 		twine upload $$filename $$filename.asc ; \
 	done
 
+test:
+	make clean_py
+	pytest --cov=qgspluginmeta --cov-config=setup.cfg
+
 testdata:
 	-rm -r tests/data/*
 	python makefile.py testdata
+	coverage combine ; coverage html
