@@ -28,7 +28,24 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+import os
 import sys
+
+import requests
+
+
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# CONST
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+TESTS_FLD = "tests"
+TESTDATA_FLD = os.path.join(TESTS_FLD, "data")
+REPO_DEFAULT_URL = "https://plugins.qgis.org/plugins/plugins.xml"
+
+MINOR_MIN = 8
+MINOR_MAX = 14
+MINOR_STEP = 2
+
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # ROUTINES
@@ -37,7 +54,12 @@ import sys
 
 def make_testdata():
 
-    print("!")
+    for minor in range(MINOR_MIN, MINOR_MAX + MINOR_STEP, MINOR_STEP):
+        r = requests.get(f"{REPO_DEFAULT_URL:s}?qgis=3.{minor:d}")
+        with open(
+            os.path.join(TESTDATA_FLD, f"plugins_all_3-{minor:02d}.xml"), "w"
+        ) as f:
+            f.write(r.text)
 
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
