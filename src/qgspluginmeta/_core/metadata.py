@@ -147,11 +147,11 @@ class QgsMetadata(QgsMetadataABC):
     def as_xmldict(self) -> typing.Dict[str, str]:
         "Export meta data to dict for XML export"
 
-        xml_dict = self.as_dict() # TODO bools / exporters ...
+        xml_dict = self.as_dict()  # TODO bools / exporters ...
 
-        xml_dict['file_name'] = f'{xml_dict["id"]:s}.{xml_dict["version"]:s}.zip'
-        xml_dict.pop('id')
-        xml_dict['@version'] = xml_dict['version']
+        xml_dict["file_name"] = f'{xml_dict["id"]:s}.{xml_dict["version"]:s}.zip'
+        xml_dict.pop("id")
+        xml_dict["@version"] = xml_dict["version"]
 
         for name, name_xml in NAME_XML.items():
             xml_dict[name_xml] = xml_dict.pop(name)
@@ -162,7 +162,7 @@ class QgsMetadata(QgsMetadataABC):
         "Export meta data as metadata.txt string"
 
         cp = ConfigParser()
-        cp["general"] = self.as_dict() # TODO bools / exporters ...
+        cp["general"] = self.as_dict()  # TODO bools / exporters ...
 
         with io.StringIO() as f:
             cp.write(f)

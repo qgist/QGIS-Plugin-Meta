@@ -47,17 +47,27 @@ def import_xml(xml_string: str) -> typing.List[QgsMetadataABC]:
     Expects a (UTF-8) string containing an entire XML document (`plugins.xml`)
     """
 
-    xml_string = xml_string.replace('& ', '&amp; ') # From plugin installer: Fix lonely ampersands in metadata
+    xml_string = xml_string.replace(
+        "& ", "&amp; "
+    )  # From plugin installer: Fix lonely ampersands in metadata
     tree = xmltodict.parse(xml_string)
 
-    if isinstance(tree['plugins']['pyqgis_plugin'], list): # more than one
-        return [QgsMetadata.from_xmldict(release_dict) for release_dict in tree['plugins']['pyqgis_plugin']]
-    return [QgsMetadata.from_xmldict(tree['plugins']['pyqgis_plugin'])] # just one
+    if isinstance(tree["plugins"]["pyqgis_plugin"], list):  # more than one
+        return [
+            QgsMetadata.from_xmldict(release_dict)
+            for release_dict in tree["plugins"]["pyqgis_plugin"]
+        ]
+    return [QgsMetadata.from_xmldict(tree["plugins"]["pyqgis_plugin"])]  # just one
 
 
 @typechecked
 def export_xml(metadata: typing.List[QgsMetadataABC]) -> str:
 
-    return xmltodict.unparse({'plugins': {'pyqgis_plugin': [
-        metaobject.as_xmldict() for metaobject in metadata
-    ]}}, pretty=True)
+    return xmltodict.unparse(
+        {
+            "plugins": {
+                "pyqgis_plugin": [metaobject.as_xmldict() for metaobject in metadata]
+            }
+        },
+        pretty=True,
+    )
