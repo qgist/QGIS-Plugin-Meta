@@ -81,6 +81,9 @@ setup(
     extras_require={
         "dev": [
             "black",
+            "coverage",
+            "pytest",
+            "pytest-cov",
             "python-language-server[all]",
             "requests",
             "setuptools",
