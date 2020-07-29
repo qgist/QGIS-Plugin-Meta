@@ -9,3 +9,4 @@ notes.md
 *.yaml
 dist/
 build/
+tests/data/
