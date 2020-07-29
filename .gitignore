@@ -12,3 +12,4 @@ build/
 tests/data/
 .coverage
 .pytest_cache/
+htmlcov/
