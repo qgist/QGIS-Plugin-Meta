@@ -27,3 +27,7 @@ upload:
 	for filename in $$(ls dist/*.tar.gz dist/*.whl) ; do \
 		twine upload $$filename $$filename.asc ; \
 	done
+
+testdata:
+	-rm -r tests/data/*
+	python makefile.py testdata
