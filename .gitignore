@@ -10,3 +10,4 @@ notes.md
 dist/
 build/
 tests/data/
+.coverage
