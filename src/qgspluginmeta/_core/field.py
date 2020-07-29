@@ -51,8 +51,8 @@ class QgsMetadataField(QgsMetadataFieldABC):
     def __init__(
         self,
         name: str,
-        name_xml: typing.Union[None, str],
         dtype: typing.Any,
+        name_xml: typing.Union[None, str] = None,
         value: typing.Any = None,
         default_value: typing.Any = None,
         importer: typing.Union[None, typing.Callable] = None,
