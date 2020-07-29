@@ -79,7 +79,14 @@ setup(
     setup_requires=[],
     install_requires=["typeguard", "xmltodict",],
     extras_require={
-        "dev": ["black", "python-language-server[all]", "setuptools", "twine", "wheel",]
+        "dev": [
+            "black",
+            "python-language-server[all]",
+            "requests",
+            "setuptools",
+            "twine",
+            "wheel",
+        ]
     },
     zip_safe=False,
     entry_points={},
