@@ -93,6 +93,15 @@ def test_version_compare():
     assert not QgsVersion.from_pluginversion('1.2') > QgsVersion.from_pluginversion('1.2')
     assert not QgsVersion.from_pluginversion('1.2') < QgsVersion.from_pluginversion('1.2')
 
+    assert QgsVersion.from_pluginversion('1.2.4') > QgsVersion.from_pluginversion('1.2.3')
+    assert not QgsVersion.from_pluginversion('1.2.4') < QgsVersion.from_pluginversion('1.2.3')
+
+    assert QgsVersion.from_pluginversion('3.2.1') > QgsVersion.from_pluginversion('3.2')
+    assert not QgsVersion.from_pluginversion('3.2.1') < QgsVersion.from_pluginversion('3.2')
+
+    assert QgsVersion.from_pluginversion('1.2') > QgsVersion.from_pluginversion('1.2 alpha')
+    assert not QgsVersion.from_pluginversion('1.2') < QgsVersion.from_pluginversion('1.2 alpha')
+
 def test_version_original():
 
     assert QgsVersion.from_pluginversion('1.2-3_4 5').original == '1.2-3_4 5'
