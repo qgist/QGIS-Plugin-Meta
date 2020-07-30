@@ -28,6 +28,7 @@ specific language governing rights and limitations under the License.
 # EXPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+from ._core.error import *
 from ._core.field import QgsMetadataField
 from ._core.metadata import QgsMetadata
 from ._core.version import QgsVersion
