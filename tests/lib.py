@@ -36,28 +36,39 @@ from qgspluginmeta import _split_xml
 # ROUTINES
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+
 def get_txts():
 
-    data_fld = os.path.join(os.path.dirname(__file__), 'data')
-    fns = [fn for fn in os.listdir(data_fld) if fn.startswith('metadata_') and fn.endswith('.txt')]
+    data_fld = os.path.join(os.path.dirname(__file__), "data")
+    fns = [
+        fn
+        for fn in os.listdir(data_fld)
+        if fn.startswith("metadata_") and fn.endswith(".txt")
+    ]
 
     for fn in fns:
-        with open(os.path.join(data_fld, fn), 'r') as f:
+        with open(os.path.join(data_fld, fn), "r") as f:
             txt = f.read()
-        plugin_id = fn.split('_', 1)[1].rsplit('_', 1)[0]
-        plugin_version = fn.rsplit('_', 1)[1].rsplit('.', 1)[0]
+        plugin_id = fn.split("_", 1)[1].rsplit("_", 1)[0]
+        plugin_version = fn.rsplit("_", 1)[1].rsplit(".", 1)[0]
         yield plugin_id, plugin_version, txt
+
 
 def get_xmls():
 
-    data_fld = os.path.join(os.path.dirname(__file__), 'data')
-    fns = [fn for fn in os.listdir(data_fld) if fn.startswith('plugins_') and fn.endswith('.xml')]
+    data_fld = os.path.join(os.path.dirname(__file__), "data")
+    fns = [
+        fn
+        for fn in os.listdir(data_fld)
+        if fn.startswith("plugins_") and fn.endswith(".xml")
+    ]
 
     for fn in fns:
-        with open(os.path.join(data_fld, fn), 'r') as f:
+        with open(os.path.join(data_fld, fn), "r") as f:
             xml = f.read()
-        qgis_version = fn.split('_', 1)[1].rsplit('.', 1)[0]
+        qgis_version = fn.split("_", 1)[1].rsplit(".", 1)[0]
         yield qgis_version, xml
+
 
 def get_xml_items():
 

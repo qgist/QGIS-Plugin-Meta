@@ -38,10 +38,11 @@ import pytest
 # TEST(s)
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-@pytest.mark.parametrize('plugin_id,plugin_version,txt', get_txts())
-def test_txt_read(plugin_id,plugin_version,txt):
 
-    if plugin_id == 'geometry_paster' and plugin_version == '0.1.1':
+@pytest.mark.parametrize("plugin_id,plugin_version,txt", get_txts())
+def test_txt_read(plugin_id, plugin_version, txt):
+
+    if plugin_id == "geometry_paster" and plugin_version == "0.1.1":
         with pytest.raises(QgsBoolValueError):
             meta = QgsMetadata.from_metadatatxt(plugin_id, txt)
         return

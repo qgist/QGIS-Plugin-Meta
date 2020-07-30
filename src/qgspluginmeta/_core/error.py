@@ -28,5 +28,6 @@ specific language governing rights and limitations under the License.
 # CLASSES
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+
 class QgsBoolValueError(ValueError):
     pass

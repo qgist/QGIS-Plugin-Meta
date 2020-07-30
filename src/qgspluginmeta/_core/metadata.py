@@ -177,8 +177,7 @@ class QgsMetadata(QgsMetadataABC):
 
     @classmethod
     def from_xmldict(
-        cls,
-        xml_dict: typing.Dict[str, typing.Union[str, None]],
+        cls, xml_dict: typing.Dict[str, typing.Union[str, None]],
     ) -> QgsMetadataABC:
         "Fixes an XML dict from xmltodict and returns a meta data object"
 

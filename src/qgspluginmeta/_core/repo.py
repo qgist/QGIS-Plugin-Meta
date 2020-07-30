@@ -47,7 +47,10 @@ def import_xml(xml_string: str) -> typing.List[QgsMetadataABC]:
     Expects a (UTF-8) string containing an entire XML document (`plugins.xml`)
     """
 
-    return [QgsMetadata.from_xmldict(release_dict) for release_dict in _split_xml(xml_string)]
+    return [
+        QgsMetadata.from_xmldict(release_dict)
+        for release_dict in _split_xml(xml_string)
+    ]
 
 
 @typechecked
