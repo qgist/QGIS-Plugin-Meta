@@ -38,8 +38,8 @@ upload:
 test:
 	make clean_py
 	pytest --cov=qgspluginmeta --cov-config=setup.cfg
+	coverage combine ; coverage html
 
 testdata:
 	-rm -r tests/data/*
 	python makefile.py testdata
-	coverage combine ; coverage html
