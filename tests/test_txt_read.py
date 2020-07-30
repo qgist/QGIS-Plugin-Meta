@@ -47,6 +47,10 @@ def test_txt_read(plugin_id, plugin_version, txt):
             meta = QgsMetadata.from_metadatatxt(plugin_id, txt)
         return
 
-    meta = QgsMetadata.from_metadatatxt(plugin_id, txt)
+    meta1 = QgsMetadata.from_metadatatxt(plugin_id, txt)
 
-    assert repr(meta) == f'<QgsMetadata id="{plugin_id:s}">'
+    assert repr(meta1) == f'<QgsMetadata id="{plugin_id:s}">'
+
+    meta2 = QgsMetadata.from_metadatatxt(plugin_id, meta1.as_metadatatxt())
+
+    assert repr(meta2) == f'<QgsMetadata id="{plugin_id:s}">'
