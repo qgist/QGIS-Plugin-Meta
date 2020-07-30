@@ -113,6 +113,9 @@ def test_version_stable():
 
     assert QgsVersion.from_pluginversion('1.2').stable
     assert not QgsVersion.from_pluginversion('1.2 BETA').stable
+    assert not QgsVersion.from_pluginversion('1.2 rc 3.5').stable
+    assert not QgsVersion.from_pluginversion('1.2 rc').stable
+    assert QgsVersion.from_pluginversion('rc 1.2').stable
 
 def test_version_prefix():
 
