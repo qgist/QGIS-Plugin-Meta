@@ -161,8 +161,11 @@ class QgsMetadata(QgsMetadataABC):
     def as_metadatatxt(self) -> str:
         "Export meta data as metadata.txt string"
 
+        txt_dict = self.as_dict()  # TODO bools / exporters ...
+        txt_dict.pop('id')
+
         cp = ConfigParser()
-        cp["general"] = self.as_dict()  # TODO bools / exporters ...
+        cp["general"] = txt_dict
 
         with io.StringIO() as f:
             cp.write(f)
