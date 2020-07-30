@@ -39,6 +39,7 @@ from .const import (
     VERSION_UNSTABLE_SUFFIXES,
     VERSION_DELIMITERS,
 )
+from .error import QgsVersionValueError
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS
@@ -227,6 +228,9 @@ class QgsVersion(QgsVersionABC):
     def from_pluginversion(cls, plugin_version_str: str) -> QgsVersionABC:
         "Parse plugin version string and return version object"
 
+        if len(plugin_version_str) == 0:
+            raise QgsVersionValueError("version must not be empty")
+
         plugin_version = cls._split_version_str(
             cls._normalize_version_str(plugin_version_str)
         )
@@ -238,6 +242,9 @@ class QgsVersion(QgsVersionABC):
         cls, qgis_version_str: str, fix_plugin_compatibility: bool = False
     ) -> QgsVersionABC:
         "Parse QGIS version string and return version object"
+
+        if len(qgis_version_str) == 0:
+            raise QgsVersionValueError("version must not be empty")
 
         x, y, z = re.findall(r"^(\d*).(\d*).(\d*)", qgis_version_str)[0]
 

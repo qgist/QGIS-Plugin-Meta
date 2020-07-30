@@ -30,7 +30,7 @@ specific language governing rights and limitations under the License.
 
 import pytest
 
-from qgspluginmeta import QgsVersion
+from qgspluginmeta import QgsVersion, QgsVersionValueError
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # TEST(s)
@@ -127,3 +127,10 @@ def test_version_qgis():
     assert QgsVersion.from_qgisversion('3.14.1') == QgsVersion.from_qgisversion('3.14.1')
     assert QgsVersion.from_qgisversion('3.99.1') == QgsVersion.from_qgisversion('3.99.1')
     assert QgsVersion.from_qgisversion('4.0.0') == QgsVersion.from_qgisversion('3.99.1', fix_plugin_compatibility = True)
+
+def test_version_empty():
+
+    with pytest.raises(QgsVersionValueError):
+        v = QgsVersion.from_pluginversion('')
+    with pytest.raises(QgsVersionValueError):
+        v = QgsVersion.from_qgisversion('')
