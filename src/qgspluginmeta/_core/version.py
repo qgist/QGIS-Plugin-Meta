@@ -177,12 +177,7 @@ class QgsVersion(QgsVersionABC):
 
         # try to compare as numeric values (but only if the first character is not 0):
         if is_numeric(x) and is_numeric(y):
-            if int(x) == int(y):
-                return 0
-            elif int(x) > int(y):
-                return 1
-            else:
-                return 2
+            return 1 if int(x) > int(y) else 2
 
         # if the strings aren't numeric or start from 0, compare them as a strings:
         # but first, set ALPHA < BETA < PREVIEW < RC < TRUNK < [NOTHING] < [ANYTHING_ELSE]
