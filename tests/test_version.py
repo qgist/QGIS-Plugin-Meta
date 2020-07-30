@@ -128,6 +128,25 @@ def test_version_qgis():
     assert QgsVersion.from_qgisversion('3.99.1') == QgsVersion.from_qgisversion('3.99.1')
     assert QgsVersion.from_qgisversion('4.0.0') == QgsVersion.from_qgisversion('3.99.1', fix_plugin_compatibility = True)
 
+def test_version_qgis_broken():
+
+    with pytest.raises(QgsVersionValueError):
+        v = QgsVersion.from_qgisversion('3')
+    with pytest.raises(QgsVersionValueError):
+        v = QgsVersion.from_qgisversion('3.')
+    with pytest.raises(QgsVersionValueError):
+        v = QgsVersion.from_qgisversion('3..')
+    with pytest.raises(QgsVersionValueError):
+        v = QgsVersion.from_qgisversion('..')
+    with pytest.raises(QgsVersionValueError):
+        v = QgsVersion.from_qgisversion('3.14.')
+    with pytest.raises(QgsVersionValueError):
+        v = QgsVersion.from_qgisversion('3.14')
+    with pytest.raises(QgsVersionValueError):
+        v = QgsVersion.from_qgisversion('3.14.x')
+    with pytest.raises(QgsVersionValueError):
+        v = QgsVersion.from_qgisversion('3.x.14')
+
 def test_version_empty():
 
     with pytest.raises(QgsVersionValueError):

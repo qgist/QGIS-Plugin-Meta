@@ -246,7 +246,13 @@ class QgsVersion(QgsVersionABC):
         if len(qgis_version_str) == 0:
             raise QgsVersionValueError("version must not be empty")
 
-        x, y, z = re.findall(r"^(\d*).(\d*).(\d*)", qgis_version_str)[0]
+        fragments = re.findall(r"^(\d*).(\d*).(\d*)", qgis_version_str)
+        if len(fragments) == 0:
+            raise QgsVersionValueError("no valid QGIS version")
+
+        x, y, z = fragments[0]
+        if len(x) == 0 or len(y) == 0 or len(z) == 0:
+            raise QgsVersionValueError("no valid QGIS version because of empty fragment(s)")
 
         # Return current QGIS version number as X.Y.Z for testing plugin compatibility.
         # If Y = 99, bump up to (X+1.0.0), so e.g. 2.99 becomes 3.0.0
