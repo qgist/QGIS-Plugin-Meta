@@ -28,7 +28,7 @@ specific language governing rights and limitations under the License.
 # IMPORT
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from .lib import get_xmls
+from .lib import get_xmls, get_xml_items
 
 from qgspluginmeta import import_xml, QgsMetadata
 
@@ -37,6 +37,13 @@ import pytest
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # TEST(s)
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+@pytest.mark.parametrize('qgis_version,xml_item', get_xml_items())
+def test_xml_item_read(qgis_version, xml_item):
+
+    release = QgsMetadata.from_xmldict(xml_item)
+
+    assert repr(release).startswith('<QgsMetadata ')
 
 @pytest.mark.parametrize('qgis_version,xml', get_xmls())
 def test_xml_read(qgis_version, xml):

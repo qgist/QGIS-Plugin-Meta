@@ -30,6 +30,8 @@ specific language governing rights and limitations under the License.
 
 import os
 
+from qgspluginmeta import _split_xml
+
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # ROUTINES
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -56,3 +58,9 @@ def get_xmls():
             xml = f.read()
         qgis_version = fn.split('_', 1)[1].rsplit('.', 1)[0]
         yield qgis_version, xml
+
+def get_xml_items():
+
+    for qgis_version, xml in get_xmls():
+        for xml_item in _split_xml(xml):
+            yield qgis_version, xml_item
