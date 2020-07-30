@@ -30,6 +30,8 @@ specific language governing rights and limitations under the License.
 
 from typeguard import typechecked
 
+from .error import QgsBoolValueError
+
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # ROUTINES
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -48,7 +50,7 @@ def str_to_bool(value: str) -> bool:
     if any((value.lower().startswith(item) for item in ("no", "false"))):
         return False
 
-    raise ValueError(f'value "{value:s}" can not be converted to bool')
+    raise QgsBoolValueError(f'value "{value:s}" can not be converted to bool')
 
 
 @typechecked
@@ -63,6 +65,6 @@ def bool_to_str(value: bool, style: str) -> str:
     }
 
     if style not in styles.keys():
-        raise ValueError(f'style "{style:s}" is unknown')
+        raise QgsBoolValueError(f'style "{style:s}" is unknown')
 
     return styles[style](value)
