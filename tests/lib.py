@@ -42,5 +42,6 @@ def get_txts():
     for fn in fns:
         with open(os.path.join(data_fld, fn), 'r') as f:
             txt = f.read()
-        plugin_id = fn.split('_', 1)[1].split('_', 1)[0]
-        yield plugin_id, txt
+        plugin_id = fn.split('_', 1)[1].rsplit('_', 1)[0]
+        plugin_version = fn.rsplit('_', 1)[1].rsplit('.', 1)[0]
+        yield plugin_id, plugin_version, txt
