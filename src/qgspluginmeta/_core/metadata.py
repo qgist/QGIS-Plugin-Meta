@@ -78,8 +78,6 @@ class QgsMetadata(QgsMetadataABC):
 
     def __getitem__(self, name: str) -> QgsMetadataFieldABC:
 
-        if not isinstance(name, str):
-            raise TypeError('"name" must be a str')
         if name not in self._fields.keys():
             raise KeyError('"name" is not a valid meta data field')
 
