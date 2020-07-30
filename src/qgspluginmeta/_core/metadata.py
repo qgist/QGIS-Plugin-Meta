@@ -51,7 +51,7 @@ class QgsMetadata(QgsMetadataABC):
     Mutable.
     """
 
-    def __init__(self, **import_fields: str):
+    def __init__(self, **import_fields: typing.Union[None, str]):
         """
         `import_fields` is a dict of keys (field names, type `str`) and values (field values, all type `str`).
         """
@@ -178,14 +178,11 @@ class QgsMetadata(QgsMetadataABC):
     @classmethod
     def from_xmldict(
         cls,
-        xml_dict: typing.Union[
-            typing.Dict[str, typing.Union[str, None]],
-            typing.OrderedDict[str, typing.Union[str, None]],
-        ],
+        xml_dict: typing.Dict[str, typing.Union[str, None]],
     ) -> QgsMetadataABC:
         "Fixes an XML dict from xmltodict and returns a meta data object"
 
-        xml_dict = dict(xml_dict)  # gets rid of OrderedDict and copies dict!
+        xml_dict = xml_dict.copy()
 
         if xml_dict["@version"] != xml_dict["version"]:
             raise ValueError("One single plugin release has two versions")
