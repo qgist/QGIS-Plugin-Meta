@@ -47,17 +47,7 @@ def import_xml(xml_string: str) -> typing.List[QgsMetadataABC]:
     Expects a (UTF-8) string containing an entire XML document (`plugins.xml`)
     """
 
-    xml_string = xml_string.replace(
-        "& ", "&amp; "
-    )  # From plugin installer: Fix lonely ampersands in metadata
-    tree = xmltodict.parse(xml_string)
-
-    if isinstance(tree["plugins"]["pyqgis_plugin"], list):  # more than one
-        return [
-            QgsMetadata.from_xmldict(release_dict)
-            for release_dict in tree["plugins"]["pyqgis_plugin"]
-        ]
-    return [QgsMetadata.from_xmldict(tree["plugins"]["pyqgis_plugin"])]  # just one
+    return [QgsMetadata.from_xmldict(release_dict) for release_dict in _split_xml(xml_string)]
 
 
 @typechecked
@@ -71,3 +61,22 @@ def export_xml(metadata: typing.List[QgsMetadataABC]) -> str:
         },
         pretty=True,
     )
+
+
+@typechecked
+def _split_xml(xml_string: str) -> typing.Generator[typing.Dict, None, None]:
+    """
+    Expects a (UTF-8) string containing an entire XML document (`plugins.xml`)
+    """
+
+    xml_string = xml_string.replace(
+        "& ", "&amp; "
+    )  # From plugin installer: Fix lonely ampersands in metadata
+    tree = xmltodict.parse(xml_string)
+
+    if not isinstance(tree["plugins"]["pyqgis_plugin"], list):  # just one
+        yield dict(tree["plugins"]["pyqgis_plugin"])
+        return
+
+    for release_dict in tree["plugins"]["pyqgis_plugin"]:  # more than one
+        yield dict(release_dict)
