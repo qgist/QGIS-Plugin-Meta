@@ -42,9 +42,13 @@ import pytest
 @pytest.mark.parametrize("qgis_version,xml_item", get_xml_items())
 def test_xml_item_read(qgis_version, xml_item):
 
-    release = QgsMetadata.from_xmldict(xml_item)
+    release1 = QgsMetadata.from_xmldict(xml_item)
 
-    assert repr(release).startswith("<QgsMetadata ")
+    assert repr(release1).startswith("<QgsMetadata ")
+
+    release2 = QgsMetadata.from_xmldict(release1.as_xmldict())
+
+    assert repr(release2).startswith("<QgsMetadata ")
 
 
 @pytest.mark.parametrize("qgis_version,xml", get_xmls())
