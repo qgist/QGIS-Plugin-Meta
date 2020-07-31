@@ -183,8 +183,6 @@ def test_version_qgis():
 def test_version_qgis_broken():
 
     with pytest.raises(QgsVersionValueError):
-        v = QgsVersion.from_qgisversion("3")
-    with pytest.raises(QgsVersionValueError):
         v = QgsVersion.from_qgisversion("3.")
     with pytest.raises(QgsVersionValueError):
         v = QgsVersion.from_qgisversion("3..")
@@ -192,8 +190,6 @@ def test_version_qgis_broken():
         v = QgsVersion.from_qgisversion("..")
     with pytest.raises(QgsVersionValueError):
         v = QgsVersion.from_qgisversion("3.14.")
-    with pytest.raises(QgsVersionValueError):
-        v = QgsVersion.from_qgisversion("3.14")
     with pytest.raises(QgsVersionValueError):
         v = QgsVersion.from_qgisversion("3.14.x")
     with pytest.raises(QgsVersionValueError):
