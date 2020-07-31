@@ -42,7 +42,12 @@ import pytest
 @pytest.mark.parametrize("plugin_id,plugin_version,txt", get_txts())
 def test_txt_read(plugin_id, plugin_version, txt):
 
-    if plugin_id == "geometry_paster" and plugin_version == "0.1.1":
+    if (plugin_id, plugin_version) in (
+        ("geometry_paster", "0.1.1"),
+        ("pandora", "2.0.1"),
+        ("qgis-select-by-radius-plus-plugin", "0.1"),
+        ("qgis-select-by-radius-plus-plugin", "0.3"),
+    ):
         with pytest.raises(QgsBoolValueError):
             meta = QgsPluginMetadata.from_metadatatxt(plugin_id, txt)
         return
