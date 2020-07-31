@@ -129,6 +129,17 @@ class QgsPluginMetadata(QgsPluginMetadataABC):
             else:
                 self._fields[key].update(other[key])
 
+    @staticmethod
+    def _make_configparser():
+
+        cp = ConfigParser(
+            interpolation=None,  # TODO ok? Because of e.g. tuflow.3.0.4.zip (containing `%` in changelog)
+            strict=False,  # TODO ok? Because of e.g. Sentinel-2 Download 3.5 (field `email` twice)
+        )
+        # cp.optionxform = str
+
+        return cp
+
     # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # EXPORT
     # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -162,10 +173,7 @@ class QgsPluginMetadata(QgsPluginMetadataABC):
         txt_dict = self.as_dict()  # TODO bools / exporters ...
         txt_dict.pop("id")
 
-        cp = ConfigParser(
-            interpolation=None,  # TODO ok? Because of e.g. tuflow.3.0.4.zip (containing `%` in changelog)
-            strict=False,  # TODO ok? Because of e.g. Sentinel-2 Download 3.5 (field `email` twice)
-        )
+        cp = self._make_configparser()
         cp["general"] = txt_dict
 
         with io.StringIO() as f:
@@ -217,10 +225,7 @@ class QgsPluginMetadata(QgsPluginMetadataABC):
     ) -> QgsPluginMetadataABC:
         "Parses a metadata.txt string and returns a meta data object"
 
-        cp = ConfigParser(
-            interpolation=None,  # TODO ok? Because of e.g. tuflow.3.0.4.zip (containing `%` in changelog)
-            strict=False,  # TODO ok? Because of e.g. Sentinel-2 Download 3.5 (field `email` twice)
-        )
+        cp = cls._make_configparser()
 
         try:
             cp.read_string(metadatatxt_string)
