@@ -30,7 +30,7 @@ specific language governing rights and limitations under the License.
 
 from .lib import get_txts
 
-from qgspluginmeta import QgsBoolValueError, QgsPluginMetadata
+from qgspluginmeta import QgsBoolValueError, QgsPluginMetadata, QgsVersion
 
 import pytest
 
@@ -56,6 +56,18 @@ def test_txt_read(plugin_id, plugin_version, txt):
 
     assert repr(meta1) == f'<QgsPluginMetadata id="{plugin_id:s}">'
 
+    if meta1['qgisMinimumVersion'].value >= QgsVersion.from_qgisversion('3.0.0'):
+        assert meta1.required_fields_present()
+    elif meta1['qgisMaximumVersion'].value_set:
+        if meta1['qgisMaximumVersion'].value > QgsVersion.from_qgisversion('3.0.0'):
+            assert meta1.required_fields_present()
+
     meta2 = QgsPluginMetadata.from_metadatatxt(plugin_id, meta1.as_metadatatxt())
 
     assert repr(meta2) == f'<QgsPluginMetadata id="{plugin_id:s}">'
+
+    if meta2['qgisMinimumVersion'].value >= QgsVersion.from_qgisversion('3.0.0'):
+        assert meta2.required_fields_present()
+    elif meta2['qgisMaximumVersion'].value_set:
+        if meta2['qgisMaximumVersion'].value > QgsVersion.from_qgisversion('3.0.0'):
+            assert meta2.required_fields_present()

@@ -40,8 +40,7 @@ SPEC = (
         "comment": "module name",
         "dtype": str,
         "name": "id",
-        "is_required":
-        True,
+        "is_required": True,
     },
     {
         "comment": "repository plugin id",
