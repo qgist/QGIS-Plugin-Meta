@@ -157,8 +157,8 @@ SPEC = (
         "comment": "dotted notation of maximum QGIS version",
         "dtype": QgsVersion,
         "importer": lambda x: QgsVersion.from_qgisversion(
-            x, fix_plugin_compatibility=False
-        ),  # TODO is it actually False?
+            x, fix_plugin_compatibility=True
+        ),  # TODO is it actually True?
         "exporter": lambda x: x.original,
         "name": "qgisMaximumVersion",
         "name_xml": "qgis_maximum_version",
