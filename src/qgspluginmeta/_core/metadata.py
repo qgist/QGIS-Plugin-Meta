@@ -34,9 +34,9 @@ import typing
 
 from typeguard import typechecked
 
-from .abc import QgsMetadataABC, QgsMetadataFieldABC
+from .abc import QgsPluginMetadataABC, QgsPluginMetadataFieldABC
 from .spec import SPEC, NAME_XML
-from .field import QgsMetadataField
+from .field import QgsPluginMetadataField
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # CLASS: META DATA
@@ -44,7 +44,7 @@ from .field import QgsMetadataField
 
 
 @typechecked
-class QgsMetadata(QgsMetadataABC):
+class QgsPluginMetadata(QgsPluginMetadataABC):
     """
     Meta data of one single plugin
 
@@ -56,13 +56,13 @@ class QgsMetadata(QgsMetadataABC):
         `import_fields` is a dict of keys (field names, type `str`) and values (field values, all type `str`).
         """
 
-        self._fields = {field["name"]: QgsMetadataField(**field) for field in SPEC}
+        self._fields = {field["name"]: QgsPluginMetadataField(**field) for field in SPEC}
 
         for key in import_fields.keys():
             if import_fields[key] is None:
                 continue
             if key not in self._fields.keys():
-                self._fields[key] = QgsMetadataField.from_unknown(
+                self._fields[key] = QgsPluginMetadataField.from_unknown(
                     key, import_fields[key]
                 )
             else:
@@ -74,9 +74,9 @@ class QgsMetadata(QgsMetadataABC):
 
     def __repr__(self) -> str:
 
-        return f'<QgsMetadata id="{self._id:s}">'
+        return f'<QgsPluginMetadata id="{self._id:s}">'
 
-    def __getitem__(self, name: str) -> QgsMetadataFieldABC:
+    def __getitem__(self, name: str) -> QgsPluginMetadataFieldABC:
 
         if name not in self._fields.keys():
             raise KeyError('"name" is not a valid meta data field')
@@ -115,7 +115,7 @@ class QgsMetadata(QgsMetadataABC):
 
         return True
 
-    def update(self, other: QgsMetadataABC):
+    def update(self, other: QgsPluginMetadataABC):
         "Similar to dict.update, update this metadata with content from other metadata"
 
         if self["id"].value != other["id"].value:
@@ -182,7 +182,7 @@ class QgsMetadata(QgsMetadataABC):
     @classmethod
     def from_xmldict(
         cls, xml_dict: typing.Dict[str, typing.Union[str, None]],
-    ) -> QgsMetadataABC:
+    ) -> QgsPluginMetadataABC:
         "Fixes an XML dict from xmltodict and returns a meta data object"
 
         xml_dict = xml_dict.copy()
@@ -214,7 +214,7 @@ class QgsMetadata(QgsMetadataABC):
     @classmethod
     def from_metadatatxt(
         cls, plugin_id: str, metadatatxt_string: str
-    ) -> QgsMetadataABC:
+    ) -> QgsPluginMetadataABC:
         "Parses a metadata.txt string and returns a meta data object"
 
         cp = ConfigParser(

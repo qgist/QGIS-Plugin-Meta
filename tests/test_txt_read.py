@@ -30,7 +30,7 @@ specific language governing rights and limitations under the License.
 
 from .lib import get_txts
 
-from qgspluginmeta import QgsBoolValueError, QgsMetadata
+from qgspluginmeta import QgsBoolValueError, QgsPluginMetadata
 
 import pytest
 
@@ -44,13 +44,13 @@ def test_txt_read(plugin_id, plugin_version, txt):
 
     if plugin_id == "geometry_paster" and plugin_version == "0.1.1":
         with pytest.raises(QgsBoolValueError):
-            meta = QgsMetadata.from_metadatatxt(plugin_id, txt)
+            meta = QgsPluginMetadata.from_metadatatxt(plugin_id, txt)
         return
 
-    meta1 = QgsMetadata.from_metadatatxt(plugin_id, txt)
+    meta1 = QgsPluginMetadata.from_metadatatxt(plugin_id, txt)
 
-    assert repr(meta1) == f'<QgsMetadata id="{plugin_id:s}">'
+    assert repr(meta1) == f'<QgsPluginMetadata id="{plugin_id:s}">'
 
-    meta2 = QgsMetadata.from_metadatatxt(plugin_id, meta1.as_metadatatxt())
+    meta2 = QgsPluginMetadata.from_metadatatxt(plugin_id, meta1.as_metadatatxt())
 
-    assert repr(meta2) == f'<QgsMetadata id="{plugin_id:s}">'
+    assert repr(meta2) == f'<QgsPluginMetadata id="{plugin_id:s}">'

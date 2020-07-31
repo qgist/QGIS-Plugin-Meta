@@ -30,7 +30,7 @@ specific language governing rights and limitations under the License.
 
 from .lib import get_xmls, get_xml_items
 
-from qgspluginmeta import import_xml, QgsMetadata
+from qgspluginmeta import import_xml, QgsPluginMetadata
 
 import pytest
 
@@ -42,13 +42,13 @@ import pytest
 @pytest.mark.parametrize("qgis_version,xml_item", get_xml_items())
 def test_xml_item_read(qgis_version, xml_item):
 
-    release1 = QgsMetadata.from_xmldict(xml_item)
+    release1 = QgsPluginMetadata.from_xmldict(xml_item)
 
-    assert repr(release1).startswith("<QgsMetadata ")
+    assert repr(release1).startswith("<QgsPluginMetadata ")
 
-    release2 = QgsMetadata.from_xmldict(release1.as_xmldict())
+    release2 = QgsPluginMetadata.from_xmldict(release1.as_xmldict())
 
-    assert repr(release2).startswith("<QgsMetadata ")
+    assert repr(release2).startswith("<QgsPluginMetadata ")
 
 
 @pytest.mark.parametrize("qgis_version,xml", get_xmls())
@@ -56,4 +56,4 @@ def test_xml_read(qgis_version, xml):
 
     releases = import_xml(xml)
 
-    assert all((isinstance(release, QgsMetadata) for release in releases))
+    assert all((isinstance(release, QgsPluginMetadata) for release in releases))

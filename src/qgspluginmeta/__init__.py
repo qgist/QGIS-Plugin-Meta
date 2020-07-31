@@ -29,7 +29,7 @@ specific language governing rights and limitations under the License.
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 from ._core.error import *
-from ._core.field import QgsMetadataField
-from ._core.metadata import QgsMetadata
+from ._core.field import QgsPluginMetadataField
+from ._core.metadata import QgsPluginMetadata
 from ._core.version import QgsVersion
 from ._core.repo import import_xml, export_xml, _split_xml

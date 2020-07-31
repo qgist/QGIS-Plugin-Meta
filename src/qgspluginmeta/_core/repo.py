@@ -30,8 +30,8 @@ specific language governing rights and limitations under the License.
 
 import typing
 
-from .abc import QgsMetadataABC
-from .metadata import QgsMetadata
+from .abc import QgsPluginMetadataABC
+from .metadata import QgsPluginMetadata
 
 from typeguard import typechecked
 import xmltodict
@@ -42,19 +42,19 @@ import xmltodict
 
 
 @typechecked
-def import_xml(xml_string: str) -> typing.List[QgsMetadataABC]:
+def import_xml(xml_string: str) -> typing.List[QgsPluginMetadataABC]:
     """
     Expects a (UTF-8) string containing an entire XML document (`plugins.xml`)
     """
 
     return [
-        QgsMetadata.from_xmldict(release_dict)
+        QgsPluginMetadata.from_xmldict(release_dict)
         for release_dict in _split_xml(xml_string)
     ]
 
 
 @typechecked
-def export_xml(metadata: typing.List[QgsMetadataABC]) -> str:
+def export_xml(metadata: typing.List[QgsPluginMetadataABC]) -> str:
 
     return xmltodict.unparse(
         {

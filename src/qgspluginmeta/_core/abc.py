@@ -35,11 +35,11 @@ import abc
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-class QgsMetadataABC(abc.ABC):
+class QgsPluginMetadataABC(abc.ABC):
     pass
 
 
-class QgsMetadataFieldABC(abc.ABC):
+class QgsPluginMetadataFieldABC(abc.ABC):
     pass
 
 

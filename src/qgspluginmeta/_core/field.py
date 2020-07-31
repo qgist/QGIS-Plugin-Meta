@@ -30,7 +30,7 @@ specific language governing rights and limitations under the License.
 
 import typing
 
-from .abc import QgsMetadataFieldABC
+from .abc import QgsPluginMetadataFieldABC
 from .spec import SPEC_DTYPES
 
 from typeguard import typechecked
@@ -41,7 +41,7 @@ from typeguard import typechecked
 
 
 @typechecked
-class QgsMetadataField(QgsMetadataFieldABC):
+class QgsPluginMetadataField(QgsPluginMetadataFieldABC):
     """
     Represents one field of meta data
 
@@ -91,7 +91,7 @@ class QgsMetadataField(QgsMetadataFieldABC):
     def __repr__(self) -> str:
 
         return (
-            "<QgsMetadata "
+            "<QgsPluginMetadata "
             f'name="{self._name:s}" '
             f'dtype={getattr(self._dtype, "__name__", str(self._dtype)):s} '
             f'set={"yes" if self.value_set else "no"} '
@@ -123,7 +123,7 @@ class QgsMetadataField(QgsMetadataFieldABC):
     # API
     # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    def copy(self) -> QgsMetadataFieldABC:
+    def copy(self) -> QgsPluginMetadataFieldABC:
 
         return type(self)(
             name=self._name,
@@ -139,7 +139,7 @@ class QgsMetadataField(QgsMetadataFieldABC):
             comment=self._comment,
         )
 
-    def update(self, other: QgsMetadataFieldABC):
+    def update(self, other: QgsPluginMetadataFieldABC):
 
         if not isinstance(other, type(self)):
             raise TypeError('"other" is not a meta data field')
@@ -221,6 +221,6 @@ class QgsMetadataField(QgsMetadataFieldABC):
     # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     @classmethod
-    def from_unknown(cls, name: str, value: typing.Any) -> QgsMetadataFieldABC:
+    def from_unknown(cls, name: str, value: typing.Any) -> QgsPluginMetadataFieldABC:
 
         return cls(name=name, value=value, dtype=type(value), known=False,)
