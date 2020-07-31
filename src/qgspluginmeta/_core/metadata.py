@@ -136,7 +136,7 @@ class QgsPluginMetadata(QgsPluginMetadataABC):
             interpolation=None,  # TODO ok? Because of e.g. tuflow.3.0.4.zip (containing `%` in changelog)
             strict=False,  # TODO ok? Because of e.g. Sentinel-2 Download 3.5 (field `email` twice)
         )
-        # cp.optionxform = str
+        cp.optionxform = str
 
         return cp
 
