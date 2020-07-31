@@ -61,6 +61,8 @@ class QgsPluginMetadata(QgsPluginMetadataABC):
         for key in import_fields.keys():
             if import_fields[key] is None:
                 continue
+            if len(import_fields[key].strip()) == 0:
+                continue
             if key not in self._fields.keys():
                 self._fields[key] = QgsPluginMetadataField.from_unknown(
                     key, import_fields[key]
