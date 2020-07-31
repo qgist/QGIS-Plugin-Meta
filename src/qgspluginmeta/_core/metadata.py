@@ -160,7 +160,7 @@ class QgsMetadata(QgsMetadataABC):
         "Export meta data as metadata.txt string"
 
         txt_dict = self.as_dict()  # TODO bools / exporters ...
-        txt_dict.pop('id')
+        txt_dict.pop("id")
 
         cp = ConfigParser(
             interpolation=None,  # TODO ok? Because of e.g. tuflow.3.0.4.zip (containing `%` in changelog)

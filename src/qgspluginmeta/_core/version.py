@@ -252,7 +252,9 @@ class QgsVersion(QgsVersionABC):
 
         x, y, z = fragments[0]
         if len(x) == 0 or len(y) == 0 or len(z) == 0:
-            raise QgsVersionValueError("no valid QGIS version because of empty fragment(s)")
+            raise QgsVersionValueError(
+                "no valid QGIS version because of empty fragment(s)"
+            )
 
         # Return current QGIS version number as X.Y.Z for testing plugin compatibility.
         # If Y = 99, bump up to (X+1.0.0), so e.g. 2.99 becomes 3.0.0
