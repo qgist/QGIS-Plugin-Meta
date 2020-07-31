@@ -91,7 +91,7 @@ class QgsPluginMetadataField(QgsPluginMetadataFieldABC):
     def __repr__(self) -> str:
 
         return (
-            "<QgsPluginMetadata "
+            "<QgsPluginMetadataField "
             f'name="{self._name:s}" '
             f'dtype={getattr(self._dtype, "__name__", str(self._dtype)):s} '
             f'set={"yes" if self.value_set else "no"} '
