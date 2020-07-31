@@ -32,6 +32,7 @@ import io
 import zipfile
 import os
 import sys
+import xml
 
 import requests
 from tqdm import tqdm
@@ -46,10 +47,11 @@ TESTS_FLD = "tests"
 TESTDATA_FLD = os.path.join(TESTS_FLD, "data")
 REPO_DEFAULT_URL = "https://plugins.qgis.org/plugins/plugins.xml"
 
-MINOR_MIN = 8
-MINOR_MAX = 14
-MINOR_STEP = 2
-
+VERSIONS = {
+    1: [8],
+    2: [minor for minor in range(0, 19)] + [99],
+    3: [minor for minor in range(0, 14+1)],
+}
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # ROUTINES
@@ -58,58 +60,76 @@ MINOR_STEP = 2
 
 def make_testdata():
 
-    for minor in range(MINOR_MIN, MINOR_MAX + MINOR_STEP, MINOR_STEP):
+    for major, minors in VERSIONS.items():
+        for minor in minors:
+            print(f'-> QGIS {major:d}.{minor:d}')
+            _fetch_data(major, minor)
 
-        r = requests.get(f"{REPO_DEFAULT_URL:s}?qgis=3.{minor:d}")
-        data = r.text
 
-        with open(os.path.join(TESTDATA_FLD, f"plugins_3-{minor:02d}.xml"), "w") as f:
-            f.write(data)
+def _fetch_data(major, minor):
 
-        data = data.replace(
-            "& ", "&amp; "
-        )  # From plugin installer: Fix lonely ampersands in metadata
-        tree = xmltodict.parse(data)
+    r = requests.get(f"{REPO_DEFAULT_URL:s}?qgis={major:d}.{minor:d}")
+    data = r.text
 
-        for node in tqdm(tree["plugins"]["pyqgis_plugin"]):
+    data_fixed = data.replace(
+        "& ", "&amp; "
+    )  # From plugin installer: Fix lonely ampersands in metadata
 
-            assert node["version"] == node["@version"]
-            assert node["file_name"].endswith(".zip")
-            assert node["version"] in node["file_name"]
+    try:
+        tree = xmltodict.parse(data_fixed)
+    except xml.parsers.expat.ExpatError:
+        print('XML broken')
+        return
 
-            node_id = node["file_name"][
-                : -1 * (len(".zip") + len(node["version"]) + len("."))
-            ]
+    with open(os.path.join(TESTDATA_FLD, f"plugins_{major:d}-{minor:02d}.xml"), "w") as f:
+        f.write(data)
 
-            meta_fn = os.path.join(
-                TESTDATA_FLD, f"metadata_{node_id:s}_{node['version']:s}.txt"
-            )
-            if os.path.exists(meta_fn):
+    for node in tqdm(tree["plugins"]["pyqgis_plugin"]):
+
+        assert node["version"] == node["@version"]
+        assert node["file_name"].endswith(".zip")
+        assert node["version"] in node["file_name"]
+
+        node_id = node["file_name"][
+            : -1 * (len(".zip") + len(node["version"]) + len("."))
+        ]
+
+        meta_fn = os.path.join(
+            TESTDATA_FLD, f"metadata_{node_id:s}_{node['version']:s}.txt"
+        )
+        if os.path.exists(meta_fn):
+            continue
+
+        try:
+            r = requests.get(node["download_url"])
+        except:
+            print(node)
+            if r.status_code == 404:
+                print("HTTP 404")
                 continue
+            raise
 
-            try:
-                r = requests.get(node["download_url"])
-                data = r.content
-                with io.BytesIO(data) as f:
-                    with zipfile.ZipFile(f, "r") as fz:
-                        meta = fz.read(f"{node_id:s}/metadata.txt").decode("utf-8")
-                with open(meta_fn, "w") as f:
-                    f.write(meta)
-            except:
-                print(node)
-                if r.status_code == 404:
-                    print("HTTP 404")
-                    continue
-                raise
+        data = r.content
 
-            # print(f'{REPO_DEFAULT_URL:s}?package_name={node_id:s}&qgis=3.{minor:d}')
-            # r = requests.get(f'{REPO_DEFAULT_URL:s}?package_name={node_id:s}&qgis=3.{minor:d}')
-            # data = r.text
-            #
-            # with open(
-            #     os.path.join(TESTDATA_FLD, f"plugins_3-{minor:02d}_{node_id:s}.xml"), "w"
-            # ) as f:
-            #     f.write(data)
+        try:
+            with io.BytesIO(data) as f:
+                with zipfile.ZipFile(f, "r") as fz:
+                    meta = fz.read(f"{node_id:s}/metadata.txt").decode("utf-8")
+        except KeyError as e:
+            print(node, 'missing metadata.txt')
+            continue
+
+        with open(meta_fn, "w") as f:
+            f.write(meta)
+
+        # print(f'{REPO_DEFAULT_URL:s}?package_name={node_id:s}&qgis=3.{minor:d}')
+        # r = requests.get(f'{REPO_DEFAULT_URL:s}?package_name={node_id:s}&qgis=3.{minor:d}')
+        # data = r.text
+        #
+        # with open(
+        #     os.path.join(TESTDATA_FLD, f"plugins_3-{minor:02d}_{node_id:s}.xml"), "w"
+        # ) as f:
+        #     f.write(data)
 
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
